@@ -22,6 +22,7 @@ module htg_zrf_hh_top(
         output [1:0] PL_USER_LED        
     );
     
+    (* KEEP = "TRUE"  *)
     wire ps_clk;
     wire ps_reset;
     
@@ -54,8 +55,8 @@ module htg_zrf_hh_top(
               .adc0_clk_0_clk_n( ADC0_CLK_N ),
               .vin0_01_0_v_p( ADC0_VIN_P ),
               .vin0_01_0_v_n( ADC0_VIN_N ),
-              .sysref_in_0_diff_p( SYSREF_FPGA_P ),
-              .sysref_in_0_diff_n( SYSREF_FPGA_N ),
+              .sysref_in_0_diff_p( SYSREF_P ),
+              .sysref_in_0_diff_n( SYSREF_N ),
               // PS calls this pl_clk, we call it ps_clk
               .pl_clk0( ps_clk ),
               .pl_resetn0( ps_reset ),
