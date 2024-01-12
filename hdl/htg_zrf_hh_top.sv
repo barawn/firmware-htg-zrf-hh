@@ -22,8 +22,8 @@ module htg_zrf_hh_top(
         output [1:0] PL_USER_LED        
     );
     
-    wire pl_clk;
-    wire pl_reset;
+    wire ps_clk;
+    wire ps_reset;
     
     // ADC AXI4-Stream clock.
     wire aclk;
@@ -56,9 +56,9 @@ module htg_zrf_hh_top(
               .vin0_01_0_v_n( ADC0_VIN_N ),
               .sysref_in_0_diff_p( SYSREF_FPGA_P ),
               .sysref_in_0_diff_n( SYSREF_FPGA_N ),
-              // pl-side stuff
-              .pl_clk0( pl_clk ),
-              .pl_resetn0( pl_reset ),
+              // PS calls this pl_clk, we call it ps_clk
+              .pl_clk0( ps_clk ),
+              .pl_resetn0( ps_reset ),
               .led_pl_tri_o( PL_USER_LED ),
               // RFDC inputs/outputs
               .m0_axis_aclk_0(aclk),
