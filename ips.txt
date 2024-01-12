@@ -1,0 +1,3 @@
+ip/adc_ila/adc_ila.xci
+ip/adc_ila_fifo/adc_ila_fifo.xci
+ip/adc_ila_widthconv/adc_ila_widthconv.xci
