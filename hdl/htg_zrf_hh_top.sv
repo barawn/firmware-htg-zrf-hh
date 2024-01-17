@@ -7,16 +7,16 @@ module htg_zrf_hh_top(
         input VP,               // doesn't need a pin loc
         input VN,               // doesn't need a pin loc
         // RFDC inputs
-        input ADC0_CLK_P,       // AF5
-        input ADC0_CLK_N,       // AF4
+        input ADC0_CLK_P,       // AF5 (300 MHz)
+        input ADC0_CLK_N,       // AF4 (300 MHz)
         input ADC0_VIN_P,       // AP2
         input ADC0_VIN_N,       // AP1
-        input SYSREF_P,         // AL16
-        input SYSREF_N,         // AL15
-        // PL clock to capture SYSREF in PL
+        input SYSREF_P,         // AL16 (1.5 MHz)
+        input SYSREF_N,         // AL15 (1.5 MHz)
+        // PL clock to capture SYSREF in PL (24 MHz)
         input FPGA_REFCLK_IN_P, //  AT6
         input FPGA_REFCLK_IN_N, //  AT7
-        // PL sysref input 
+        // PL sysref input (1.5 MHz)
         input SYSREF_FPGA_P,    // AL16
         input SYSREF_FPGA_N,    // AL15
         output [1:0] PL_USER_LED        
@@ -33,19 +33,31 @@ module htg_zrf_hh_top(
     `DEFINE_AXI4S_IF( adc0_ , 128 );
     // SYSREF capture register
     (* IOB = "TRUE" *)
+    reg sysref_reg_slowclk = 0;
     reg sysref_reg = 0;
-    // output clock (187.5 MHz)
+    // output clock (187.5 MHz, unused)
     wire adc_clk;
     
-    // input PL reference clk
+    // slower PL capture clk b/c 375 is too fast I guess? (75 MHz)
     wire ref_clk;
-    IBUFDS u_rcbuf(.I(FPGA_REFCLK_IN_P),.IB(FPGA_REFCLK_IN_N),.O(ref_clk));
+    // reset/locked, maybe pop these through EMIO
+    wire refclkwiz_reset = 1'b0;
+    wire refclkwiz_locked;
+    
+    // generate clocks
+    slow_refclk_wiz u_rcwiz(.reset(refclkwiz_reset),
+                            .clk_in1_p(FPGA_REFCLK_IN_P),
+                            .clk_in1_n(FPGA_REFCLK_IN_N),
+                            .clk_out1(ref_clk),
+                            .clk_out2(aclk),
+                            .locked(refclkwiz_locked));
+    
     // input sysref
     wire sys_ref;
-    IBUFDS u_srbuf(.I(SYSREF_FPGA_P),.IB(SYSREF_FPGA_N),.O(sys_ref));
+    IBUFDS u_srbuf(.I(SYSREF_FPGA_P),.IB(SYSREF_FPGA_N),.O(sys_ref));    
     
-    
-    always @(posedge ref_clk) sysref_reg <= sys_ref;
+    always @(posedge ref_clk) sysref_reg_slowclk <= sys_ref;
+    always @(posedge aclk) sysref_reg <= sysref_reg_slowclk;
     
     htg_zrf8_ps_wrapper 
         u_ps( // analogs
