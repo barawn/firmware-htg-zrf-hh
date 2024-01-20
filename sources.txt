@@ -1,4 +1,4 @@
-bd/htg_zrf8_ps.bd
+bd/htg_zrf8_ps/htg_zrf8_ps.bd
 verilog-library-barawn/hdl/adc_ila_transfer.v
 verilog-library-barawn/hdl/flag_sync.v
 hdl/htg_zrf8_ps_wrapper.v

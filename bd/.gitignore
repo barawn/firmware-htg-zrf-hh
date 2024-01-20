@@ -4,8 +4,8 @@
 *
 # Don't ignore directories.
 !*/
-# ignore the ip/ directory
-ip/
 # Don't ignore .gitignore and .bd files.
 !.gitignore
 !*.bd
+# Ignore directories named "ip/"
+*ip/

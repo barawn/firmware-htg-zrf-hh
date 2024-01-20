@@ -4055,8 +4055,8 @@
       },
       "debug_bridge_0": {
         "vlnv": "xilinx.com:ip:debug_bridge:3.0",
-        "xci_name": "htg_zrf8_ps_debug_bridge_0_1",
-        "xci_path": "ip\\htg_zrf8_ps_debug_bridge_0_1\\htg_zrf8_ps_debug_bridge_0_1.xci",
+        "xci_name": "htg_zrf8_ps_debug_bridge_0_0",
+        "xci_path": "ip\\htg_zrf8_ps_debug_bridge_0_0\\htg_zrf8_ps_debug_bridge_0_0.xci",
         "inst_hier_path": "debug_bridge_0",
         "parameters": {
           "C_DEBUG_MODE": {
