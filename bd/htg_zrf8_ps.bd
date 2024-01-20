@@ -1,7 +1,7 @@
 {
   "design": {
     "design_info": {
-      "boundary_crc": "0xA8926ECEA69D70A2",
+      "boundary_crc": "0xA8926ECE35A1FEFC",
       "device": "xczu28dr-ffvg1517-2-e",
       "name": "htg_zrf8_ps",
       "rev_ctrl_bd_flag": "RevCtrlBdOff",
@@ -123,8 +123,7 @@
             "value_src": "default"
           },
           "FREQ_HZ": {
-            "value": "100000000",
-            "value_src": "default"
+            "value": "375000000"
           },
           "HAS_TKEEP": {
             "value": "0",
@@ -264,8 +263,7 @@
             "value_src": "default"
           },
           "FREQ_HZ": {
-            "value": "100000000",
-            "value_src": "default"
+            "value": "375000000"
           },
           "FREQ_TOLERANCE_HZ": {
             "value": "0",
@@ -4178,12 +4176,6 @@
         "ports": [
           "m0_axis_aclk_0",
           "usp_rf_data_converter_0/m0_axis_aclk"
-        ]
-      },
-      "m0_axis_aresetn_0_1": {
-        "ports": [
-          "m0_axis_aresetn_0",
-          "usp_rf_data_converter_0/m0_axis_aresetn"
         ]
       },
       "proc_sys_reset_0_interconnect_aresetn": {
