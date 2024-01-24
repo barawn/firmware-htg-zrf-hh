@@ -53,23 +53,25 @@ module adc_cap_x2 #(parameter DWIDTH_IN = 128,
     reg fast_clk_phase_rereg = 0;
     // capture upper
     reg capture_upper = 0;
-    // clk  clkx2   slow_clk_phase fast_clk_phase fast_clk_phase_rereg  capture_upper   din     dout
-    // 0    0       0              1              1                     1               B       XA
-    // 0    1       0              0              1                     0               C       BA
-    // 1    2       1              0              0                     1               D       BC
-    // 1    3       1              1              0                     0               E       DC
-    // 2    4       0              1              1                     1               F       DE
-    // 2    5       0              0              1                     0               G       FE
+    // clk  clkx2   slow_clk_phase fast_clk_phase fast_clk_phase_rereg  capture_upper   din     din_store   dout
+    // 0    0       0              1              1                     1               B       A           XX
+    // 0    1       0              0              1                     0               C       A           BA
+    // 1    2       1              0              0                     1               D       C           BA
+    // 1    3       1              1              0                     0               E       C           DC
+    // 2    4       0              1              1                     1               F       E           DC
+    // 2    5       0              0              1                     0               G       E           FE
+    reg [127:0] din_store = {128{1'b0}};
     reg [255:0] dout = {256{1'b0}};
     reg [255:0] dout_rereg = {256{1'b0}};
-
     always @(posedge aclk) begin
         fast_clk_phase_rereg <= fast_clk_phase;
         fast_clk_phase <= slow_clk_phase;
         capture_upper <= fast_clk_phase != fast_clk_phase_rereg;
         
-        if (!capture_upper) dout[0 +: 128] <= s_axis_tdata;
-        if (capture_upper) dout[128 +: 128] <= s_axis_tdata;                
+        if (!capture_upper) din_store <= s_axis_tdata;
+        // dout is only captured every other clock, so its data is stable
+        // in the clk_div2 regime
+        if (capture_upper) dout <= { s_axis_tdata, din_store };
     end
     
     always @(posedge clk_i) begin
