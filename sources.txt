@@ -1,5 +1,9 @@
-bd/htg_zrf8_ps/htg_zrf8_ps.bd
-verilog-library-barawn/hdl/adc_ila_transfer.v
+hdl/adc_cap_x2.v
 verilog-library-barawn/hdl/flag_sync.v
+/hdl/pl_gpio_adc_if.v
+bd/htg_zrf8_ps/htg_zrf8_ps.bd
+bd/htg_zrf_hh_mts/htg_zrf_hh_mts/htg_zrf_hh_mts.bd
+verilog-library-barawn/hdl/adc_ila_transfer.v
 hdl/htg_zrf8_ps_wrapper.v
+hdl/htg_zrf_hh_mts_wrapper.v
 hdl/htg_zrf_hh_top.sv
