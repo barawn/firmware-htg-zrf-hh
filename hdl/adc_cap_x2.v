@@ -2,7 +2,8 @@
 // MAX_XFER needs to be a power of 2
 module adc_cap_x2 #(parameter DWIDTH_IN = 128,
                     parameter DWIDTH_OUT = 256,
-                    parameter MAX_XFER = 2048)(
+                    parameter MAX_XFER = 2048,
+                    parameter USE_DEBUG = 0)(
         input aclk,
         input aresetn,
         input [DWIDTH_IN-1:0] s_axis_tdata,
@@ -33,6 +34,14 @@ module adc_cap_x2 #(parameter DWIDTH_IN = 128,
     localparam ADDR_BITS = $clog2(MAX_XFER);
     // use the carry out of the ripple counter to trip the end
     reg [ADDR_BITS-1:0] counter = {ADDR_BITS{1'b0}};
+    // bit 0 = 8    0
+    // bit 1 = 16   upshift 1
+    // bit 2 = 32   upshift 2
+    // bit 3 = 64   upshift 3
+    // bit 4 = 128  upshift 4
+    // bit 5 = 256  upshift 5
+    wire [ADDR_BITS+5-1:0] this_addr = { counter, {5{1'b0}} };
+    
     wire [ADDR_BITS:0] counter_plus_one = counter + 1;
     reg running = 0;
     reg [1:0] capture = 2'b00;
@@ -63,6 +72,7 @@ module adc_cap_x2 #(parameter DWIDTH_IN = 128,
     reg [127:0] din_store = {128{1'b0}};
     reg [255:0] dout = {256{1'b0}};
     reg [255:0] dout_rereg = {256{1'b0}};
+
     always @(posedge aclk) begin
         fast_clk_phase_rereg <= fast_clk_phase;
         fast_clk_phase <= slow_clk_phase;
@@ -90,7 +100,7 @@ module adc_cap_x2 #(parameter DWIDTH_IN = 128,
         else if (counter_plus_one[ADDR_BITS]) running <= 0;
     end    
         
-    assign bram_addr = counter;
+    assign bram_addr = this_addr;
     assign bram_we = {(DWIDTH_OUT/8){running}};
     assign bram_en = running;
     assign bram_wdata = dout_rereg;
