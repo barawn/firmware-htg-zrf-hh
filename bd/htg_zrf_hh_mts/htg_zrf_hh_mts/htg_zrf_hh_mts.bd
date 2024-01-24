@@ -4405,6 +4405,11 @@
             "xci_name": "htg_zrf_hh_mts_adc_cap_x2_0_0",
             "xci_path": "ip\\htg_zrf_hh_mts_adc_cap_x2_0_0\\htg_zrf_hh_mts_adc_cap_x2_0_0.xci",
             "inst_hier_path": "adc_cap_0/adc_cap_x2_0",
+            "parameters": {
+              "USE_DEBUG": {
+                "value": "1"
+              }
+            },
             "reference_info": {
               "ref_type": "hdl",
               "ref_name": "adc_cap_x2",
