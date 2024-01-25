@@ -137,7 +137,6 @@ set obj [get_runs synth_1]
 set_property -name "needs_refresh" -value "1" -objects $obj
 set_property -name "part" -value "xczu28dr-ffvg1517-2-e" -objects $obj
 set_property -name "strategy" -value "Vivado Synthesis Defaults" -objects $obj
-set_property -name "steps.synth_design.tcl.pre" -value "[file normalize "$origin_dir/pre_synthesis.tcl"]" -objects $obj
 
 # set the current synth run
 current_run -synthesis [get_runs synth_1]
