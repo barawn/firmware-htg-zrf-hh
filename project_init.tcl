@@ -12,4 +12,7 @@ source [file join [get_repo_dir] verilog-library-barawn tclbits utility.tcl]
 
 source [file join [get_repo_dir] verilog-library-barawn tclbits repo_files.tcl]
 
+# add include directories
+add_include_dir [file join [get_repo_dir] "verilog-library-barawn/include"]
+
 check_all
