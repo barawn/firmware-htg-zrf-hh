@@ -79,6 +79,11 @@ module htg_zrf_hh_mts_wrapper
     vin3_01_0_v_p,
     vin3_23_0_v_n,
     vin3_23_0_v_p,
+    // dacs, not actually used
+    vout00_0_v_n,
+    vout00_0_v_p,
+    dac0_clk_0_clk_n,
+    dac0_clk_0_clk_p,       
     clk_adc0_0,
     pl_clk0,
     pl_resetn0);
@@ -151,6 +156,11 @@ module htg_zrf_hh_mts_wrapper
   input vin3_01_0_v_p;
   input vin3_23_0_v_n;
   input vin3_23_0_v_p;
+
+  output vout00_0_v_n;
+  output vout00_0_v_p;
+  input dac0_clk_0_clk_n;
+  input dac0_clk_0_clk_p;
   
   output pl_clk0;
   output pl_resetn0;
@@ -296,6 +306,10 @@ module htg_zrf_hh_mts_wrapper
         .vin3_01_0_v_p(vin3_01_0_v_p),
         .vin3_23_0_v_n(vin3_23_0_v_n),
         .vin3_23_0_v_p(vin3_23_0_v_p),
+        .vout00_0_v_n(vout00_0_v_n),
+        .vout00_0_v_p(vout00_0_v_p),
+        .dac0_clk_0_clk_n(dac0_clk_0_clk_n),
+        .dac0_clk_0_clk_p(dac0_clk_0_clk_p),        
         .clk_adc0_0(clk_adc0_0),
         .pl_clk0(pl_clk0),
         .pl_resetn0(pl_resetn0));

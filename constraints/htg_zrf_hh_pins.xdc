@@ -14,6 +14,12 @@ set_property PACKAGE_PIN AB4 [get_ports ADC4_CLK_N]
 set_property PACKAGE_PIN Y5 [get_ports ADC6_CLK_P]
 set_property PACKAGE_PIN Y4 [get_ports ADC6_CLK_N]
 
+set_property PACKAGE_PIN R5 [get_ports DAC0_CLK_P]
+set_property PACKAGE_PIN R4 [get_ports DAC0_CLK_N]
+
+set_property PACKAGE_PIN U2 [get_ports DAC0_VOUT_P]
+set_property PACKAGE_PIN U1 [get_ports DAC0_VOUT_N]
+
 # maybe these don't even need anything?
 set_property -dict { PACKAGE_PIN AP2 } [get_ports ADC0_VIN_P]
 set_property -dict { PACKAGE_PIN AP1 } [get_ports ADC0_VIN_N]

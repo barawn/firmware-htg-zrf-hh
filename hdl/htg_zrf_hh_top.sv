@@ -35,6 +35,12 @@ module htg_zrf_hh_top(
         input ADC7_VIN_P,       // Y2
         input ADC7_VIN_N,       // Y1        
 
+        // god damnit
+        input DAC0_CLK_P,       // R5
+        input DAC0_CLK_N,       // R4
+        output DAC0_VOUT_P,     // U2
+        output DAC0_VOUT_N,     // U1
+
         input SYSREF_P,         // AL16 (1.5 MHz)
         input SYSREF_N,         // AL15 (1.5 MHz)
         // PL clock to capture SYSREF in PL (24 MHz)
@@ -147,6 +153,9 @@ module htg_zrf_hh_top(
     always @(posedge ref_clk) sysref_reg_slowclk <= sys_ref;
     always @(posedge aclk) sysref_reg <= sysref_reg_slowclk;
     
+    // ila for dbg
+    sysref_ila u_sysref_ila(.clk(aclk),.probe0(sysref_reg));
+    
 
     generate
         if (THIS_DESIGN == "BASE") begin : BASE
@@ -221,6 +230,11 @@ module htg_zrf_hh_top(
                                          .vin3_01_0_v_n( ADC6_VIN_N ),
                                          .vin3_23_0_v_p( ADC7_VIN_P ),
                                          .vin3_23_0_v_n( ADC7_VIN_N ),
+                                         // vouts
+                                         .vout00_0_v_p( DAC0_VOUT_P ),
+                                         .vout00_0_v_n( DAC0_VOUT_N ),
+                                         .dac0_clk_0_clk_p( DAC0_CLK_P ),
+                                         .dac0_clk_0_clk_n( DAC0_CLK_N ),
                                          // AXI stream *outputs*
                                          `CONNECT_AXI4S_MIN_IF( m00_axis_0_ , adc0_ ),
                                          `CONNECT_AXI4S_MIN_IF( m02_axis_0_ , adc1_ ),
