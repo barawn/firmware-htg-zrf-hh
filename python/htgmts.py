@@ -5,8 +5,16 @@ import subprocess
 import htgrfclk
 import numpy as np
 
+import logging
+
 class htgMTS(Overlay):
-    def __init__(self, bitfile_name='htg_zrf_hh_mts.bit', **kwargs):
+    def __init__(self, bitfile_name='htg_zrf_hh_mts.bit',
+                 logger=None, **kwargs):
+        if logger is None:
+            self.logger = logging.getLogger(__name__)
+            logging.basicConfig(level=logging.DEBUG)
+        else:
+            self.logger = logger
         # Run lsmod command to get the loaded modules list
         output = subprocess.check_output(['lsmod'])
         # Check if "zocl" is present in the output
