@@ -4,21 +4,14 @@ import os
 import subprocess
 import htgrfclk
 import numpy as np
-
-import logging
+import xrfdc
 
 class htgMTS(Overlay):
-    def __init__(self, bitfile_name='htg_zrf_hh_mts.bit',
-                 logger=None, **kwargs):
-        if logger is None:
-            self.logger = logging.getLogger(__name__)
-            logging.basicConfig(level=logging.DEBUG)
-        else:
-            self.logger = logger
+    def __init__(self, bitfile_name='htg_zrf_hh_mts.bit', reload=False, **kwargs):
         # Run lsmod command to get the loaded modules list
         output = subprocess.check_output(['lsmod'])
         # Check if "zocl" is present in the output
-        if b'zocl' in output:
+        if b'zocl' in output and reload == False:
             # If present, remove the module using rmmod command
             rmmod_output = subprocess.run(['rmmod', 'zocl'])
             # Check return code
@@ -48,8 +41,8 @@ class htgMTS(Overlay):
         
         super().__init__(resolve_binary_path(bitfile_name), **kwargs)
 
+        self.xrfdc = self.usp_rf_data_converter_0
         self.dbg = self.debug_bridge_0
-        # DON'T ACCESS THESE DIRECTLY THE MEMVIEWS ARE KER-EFFED
         self.adcmem = [ self.memdict_to_view("adc_cap_0/axi_bram_ctrl_0"),
                         self.memdict_to_view("adc_cap_1/axi_bram_ctrl_0"),
                         self.memdict_to_view("adc_cap_2/axi_bram_ctrl_0"),
@@ -61,19 +54,46 @@ class htgMTS(Overlay):
         mem_range = self.mem_dict[ip]["addr_range"]
         ipmmio = MMIO(baseAddress, mem_range)
         # this is WRONG how the hell did this work
-        return ipmmio.array[0:ipmmio.length].view(dtype)
+        #return ipmmio.array[0:ipmmio.length].view(dtype)
+        return ipmmio.array[0:(ipmmio.length >> 2)].view(dtype)
     
     # pointless
     def verify_clock_tree(self):
         return True
 
-    # THIS DOES NOTHING FOR NOW
     def sync_tiles(self, dacTarget=-1, adcTarget=-1):
-        return
+        self.xrfdc.mts_dac_config.Tiles = 0b0001
+        self.xrfdc.mts_adc_config.Tiles = 0b1111
+        self.xrfdc.mts_dac_config.SysRef_Enable = 1
+        self.xrfdc.mts_adc_config.SysRef_Enable = 1
+        self.xrfdc.mts_dac_config.Target_Latency = -1
+        self.xrfdc.mts_adc_config.Target_Latency = -1
+        self.xrfdc.mts_dac()
+        self.xrfdc.mts_adc()
 
-    # THIS DOES NOTHING FOR NOW
     def init_tile_sync(self):
-        return
+        # Reset the engine, I guess. Start with tile 0 only
+        self.xrfdc.mts_dac_config.Tiles = 0b0001
+        self.xrfdc.mts_adc_config.Tiles = 0b0001
+        self.xrfdc.mts_dac_config.SysRef_Enable = 1
+        self.xrfdc.mts_adc_config.SysRef_Enable = 1
+        self.xrfdc.mts_dac_config.Target_Latency = -1
+        self.xrfdc.mts_adc_config.Target_Latency = -1
+        self.xrfdc.mts_dac()
+        self.xrfdc.mts_adc()
+        # reset the desired active tiles, which for us is fixed
+        # only use DAC 0
+        self.xrfdc.dac_tiles[0].Reset()
+        # use all ADC tiles. Turn off/on FIFOs
+        self.xrfdc.adc_tiles[0].SetupFIFO(0)
+        self.xrfdc.adc_tiles[1].SetupFIFO(0)
+        self.xrfdc.adc_tiles[2].SetupFIFO(0)
+        self.xrfdc.adc_tiles[3].SetupFIFO(0)
+        self.xrfdc.adc_tiles[0].SetupFIFO(1)
+        self.xrfdc.adc_tiles[1].SetupFIFO(1)
+        self.xrfdc.adc_tiles[2].SetupFIFO(1)
+        self.xrfdc.adc_tiles[3].SetupFIFO(1)
+        
         
     # the default here is 3 to match the MTS workbooks
     def internal_capture(self, buf, num_chan=3):
