@@ -62,28 +62,26 @@ class htgMTS(Overlay):
         return True
 
     def sync_tiles(self, dacTarget=-1, adcTarget=-1):
-        self.xrfdc.mts_dac_config.Tiles = 0b0001
+	# try with only ADCs
         self.xrfdc.mts_adc_config.Tiles = 0b1111
-        self.xrfdc.mts_dac_config.SysRef_Enable = 1
         self.xrfdc.mts_adc_config.SysRef_Enable = 1
-        self.xrfdc.mts_dac_config.Target_Latency = -1
         self.xrfdc.mts_adc_config.Target_Latency = -1
-        self.xrfdc.mts_dac()
         self.xrfdc.mts_adc()
 
     def init_tile_sync(self):
         # Reset the engine, I guess. Start with tile 0 only
-        self.xrfdc.mts_dac_config.Tiles = 0b0001
-        self.xrfdc.mts_adc_config.Tiles = 0b0001
+        self.xrfdc.dac_tiles[0].CustomStartUp(0, 6)
+	# try only running for dac tile 0 and shutting it down to state 6
+        self.xrfdc.mts_dac_config.Tiles = 0b0000
         self.xrfdc.mts_dac_config.SysRef_Enable = 1
-        self.xrfdc.mts_adc_config.SysRef_Enable = 1
         self.xrfdc.mts_dac_config.Target_Latency = -1
+        self.xrfdc.mts_adc_config.Tiles = 0b0001
+        self.xrfdc.mts_adc_config.SysRef_Enable = 1
         self.xrfdc.mts_adc_config.Target_Latency = -1
+        # do the stuff to turn it on
         self.xrfdc.mts_dac()
         self.xrfdc.mts_adc()
         # reset the desired active tiles, which for us is fixed
-        # only use DAC 0
-        self.xrfdc.dac_tiles[0].Reset()
         # use all ADC tiles. Turn off/on FIFOs
         self.xrfdc.adc_tiles[0].SetupFIFO(0)
         self.xrfdc.adc_tiles[1].SetupFIFO(0)
