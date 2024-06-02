@@ -7,3 +7,14 @@ verilog-library-barawn/hdl/adc_ila_transfer.v
 hdl/htg_zrf8_ps_wrapper.v
 hdl/htg_zrf_hh_mts_wrapper.v
 hdl/htg_zrf_hh_top.sv
+hdl/localwb/boardman_interface_v2.v
+hdl/localwb/uart/uart_rx6.v
+hdl/localwb/cobs/axis_fifo.v
+hdl/localwb/boardman_v2_uart.v
+hdl/localwb/boardman_v2_sm.v
+hdl/localwb/uart/uart_tx6.v
+hdl/localwb/boardman_wrapper.sv
+hdl/localwb/cobs/axis_cobs_encode.v
+hdl/localwb/boardman_v2_cobs.v
+hdl/localwb/cobs/axis_cobs_decode.v
+designs/basic_design.sv
