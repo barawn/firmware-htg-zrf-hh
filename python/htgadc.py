@@ -3,6 +3,7 @@ import time
 import os
 import subprocess
 import htgrfclk
+import xrfdc
 
 class htgADC(Overlay):
     def __init__(self, bitfile_name='htg_zrf_hh_top.bit', **kwargs):
@@ -25,7 +26,7 @@ class htgADC(Overlay):
         # initialize the clocks. The clocks here generate 24 MHz to the LMXs and to the FPGA
         # and 1.5 MHz to SYSREF and LMX syncs.
         # The LMXs then generate 600 MHz to the RFSoC which generates 3 GHz for sampling.
-        htgrfclk.set_rf_clks(lmkfn='LMK_HTGADC.txt',lmxfn='LMX_HTGADC.txt')            
+        htgrfclk.set_rf_clks(lmkfn='LMK_HTGADC.txt',lmxfn='LMX_HTGADC_3.txt')            
         super().__init__(resolve_binary_path(bitfile_name), **kwargs)
 
 def resolve_binary_path(bitfile_name):
