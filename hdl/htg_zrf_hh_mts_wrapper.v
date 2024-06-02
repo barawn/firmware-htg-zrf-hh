@@ -1,7 +1,7 @@
 //Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
 //--------------------------------------------------------------------------------
 //Tool Version: Vivado v.2022.2 (win64) Build 3671981 Fri Oct 14 05:00:03 MDT 2022
-//Date        : Mon Jan 22 15:35:41 2024
+//Date        : Sun Jun  2 17:19:18 2024
 //Host        : ASCPHY-NC196428 running 64-bit major release  (build 9200)
 //Command     : generate_target htg_zrf_hh_mts_wrapper.bd
 //Design      : htg_zrf_hh_mts_wrapper
@@ -22,6 +22,8 @@ module htg_zrf_hh_mts_wrapper
     S_AXIS_3_tdata,
     S_AXIS_3_tready,
     S_AXIS_3_tvalid,
+    UART_rxd,
+    UART_txd,
     Vp_Vn_0_v_n,
     Vp_Vn_0_v_p,
     adc0_clk_0_clk_n,
@@ -32,6 +34,10 @@ module htg_zrf_hh_mts_wrapper
     adc2_clk_0_clk_p,
     adc3_clk_0_clk_n,
     adc3_clk_0_clk_p,
+    capture_o,
+    clk_adc0_0,
+    dac0_clk_0_clk_n,
+    dac0_clk_0_clk_p,
     m00_axis_0_tdata,
     m00_axis_0_tready,
     m00_axis_0_tvalid,
@@ -56,6 +62,8 @@ module htg_zrf_hh_mts_wrapper
     m32_axis_0_tdata,
     m32_axis_0_tready,
     m32_axis_0_tvalid,
+    pl_clk0,
+    pl_resetn0,
     s_axi_aclk_0,
     s_axi_aresetn_0,
     s_axis_aclk_0,
@@ -79,14 +87,8 @@ module htg_zrf_hh_mts_wrapper
     vin3_01_0_v_p,
     vin3_23_0_v_n,
     vin3_23_0_v_p,
-    // dacs, not actually used
     vout00_0_v_n,
-    vout00_0_v_p,
-    dac0_clk_0_clk_n,
-    dac0_clk_0_clk_p,       
-    clk_adc0_0,
-    pl_clk0,
-    pl_resetn0);
+    vout00_0_v_p);
   input [127:0]S_AXIS_0_tdata;
   output S_AXIS_0_tready;
   input S_AXIS_0_tvalid;
@@ -99,6 +101,8 @@ module htg_zrf_hh_mts_wrapper
   input [127:0]S_AXIS_3_tdata;
   output S_AXIS_3_tready;
   input S_AXIS_3_tvalid;
+  input UART_rxd;
+  output UART_txd;
   input Vp_Vn_0_v_n;
   input Vp_Vn_0_v_p;
   input adc0_clk_0_clk_n;
@@ -109,6 +113,10 @@ module htg_zrf_hh_mts_wrapper
   input adc2_clk_0_clk_p;
   input adc3_clk_0_clk_n;
   input adc3_clk_0_clk_p;
+  output capture_o;
+  output clk_adc0_0;
+  input dac0_clk_0_clk_n;
+  input dac0_clk_0_clk_p;
   output [127:0]m00_axis_0_tdata;
   input m00_axis_0_tready;
   output m00_axis_0_tvalid;
@@ -133,6 +141,8 @@ module htg_zrf_hh_mts_wrapper
   output [127:0]m32_axis_0_tdata;
   input m32_axis_0_tready;
   output m32_axis_0_tvalid;
+  output pl_clk0;
+  output pl_resetn0;
   input s_axi_aclk_0;
   input s_axi_aresetn_0;
   input s_axis_aclk_0;
@@ -156,15 +166,8 @@ module htg_zrf_hh_mts_wrapper
   input vin3_01_0_v_p;
   input vin3_23_0_v_n;
   input vin3_23_0_v_p;
-
   output vout00_0_v_n;
   output vout00_0_v_p;
-  input dac0_clk_0_clk_n;
-  input dac0_clk_0_clk_p;
-  
-  output pl_clk0;
-  output pl_resetn0;
-  output clk_adc0_0;
 
   wire [127:0]S_AXIS_0_tdata;
   wire S_AXIS_0_tready;
@@ -178,6 +181,8 @@ module htg_zrf_hh_mts_wrapper
   wire [127:0]S_AXIS_3_tdata;
   wire S_AXIS_3_tready;
   wire S_AXIS_3_tvalid;
+  wire UART_rxd;
+  wire UART_txd;
   wire Vp_Vn_0_v_n;
   wire Vp_Vn_0_v_p;
   wire adc0_clk_0_clk_n;
@@ -188,6 +193,10 @@ module htg_zrf_hh_mts_wrapper
   wire adc2_clk_0_clk_p;
   wire adc3_clk_0_clk_n;
   wire adc3_clk_0_clk_p;
+  wire capture_o;
+  wire clk_adc0_0;
+  wire dac0_clk_0_clk_n;
+  wire dac0_clk_0_clk_p;
   wire [127:0]m00_axis_0_tdata;
   wire m00_axis_0_tready;
   wire m00_axis_0_tvalid;
@@ -212,6 +221,8 @@ module htg_zrf_hh_mts_wrapper
   wire [127:0]m32_axis_0_tdata;
   wire m32_axis_0_tready;
   wire m32_axis_0_tvalid;
+  wire pl_clk0;
+  wire pl_resetn0;
   wire s_axi_aclk_0;
   wire s_axi_aresetn_0;
   wire s_axis_aclk_0;
@@ -235,6 +246,8 @@ module htg_zrf_hh_mts_wrapper
   wire vin3_01_0_v_p;
   wire vin3_23_0_v_n;
   wire vin3_23_0_v_p;
+  wire vout00_0_v_n;
+  wire vout00_0_v_p;
 
   htg_zrf_hh_mts htg_zrf_hh_mts_i
        (.S_AXIS_0_tdata(S_AXIS_0_tdata),
@@ -249,6 +262,8 @@ module htg_zrf_hh_mts_wrapper
         .S_AXIS_3_tdata(S_AXIS_3_tdata),
         .S_AXIS_3_tready(S_AXIS_3_tready),
         .S_AXIS_3_tvalid(S_AXIS_3_tvalid),
+        .UART_rxd(UART_rxd),
+        .UART_txd(UART_txd),
         .Vp_Vn_0_v_n(Vp_Vn_0_v_n),
         .Vp_Vn_0_v_p(Vp_Vn_0_v_p),
         .adc0_clk_0_clk_n(adc0_clk_0_clk_n),
@@ -259,6 +274,10 @@ module htg_zrf_hh_mts_wrapper
         .adc2_clk_0_clk_p(adc2_clk_0_clk_p),
         .adc3_clk_0_clk_n(adc3_clk_0_clk_n),
         .adc3_clk_0_clk_p(adc3_clk_0_clk_p),
+        .capture_o(capture_o),
+        .clk_adc0_0(clk_adc0_0),
+        .dac0_clk_0_clk_n(dac0_clk_0_clk_n),
+        .dac0_clk_0_clk_p(dac0_clk_0_clk_p),
         .m00_axis_0_tdata(m00_axis_0_tdata),
         .m00_axis_0_tready(m00_axis_0_tready),
         .m00_axis_0_tvalid(m00_axis_0_tvalid),
@@ -283,6 +302,8 @@ module htg_zrf_hh_mts_wrapper
         .m32_axis_0_tdata(m32_axis_0_tdata),
         .m32_axis_0_tready(m32_axis_0_tready),
         .m32_axis_0_tvalid(m32_axis_0_tvalid),
+        .pl_clk0(pl_clk0),
+        .pl_resetn0(pl_resetn0),
         .s_axi_aclk_0(s_axi_aclk_0),
         .s_axi_aresetn_0(s_axi_aresetn_0),
         .s_axis_aclk_0(s_axis_aclk_0),
@@ -307,10 +328,5 @@ module htg_zrf_hh_mts_wrapper
         .vin3_23_0_v_n(vin3_23_0_v_n),
         .vin3_23_0_v_p(vin3_23_0_v_p),
         .vout00_0_v_n(vout00_0_v_n),
-        .vout00_0_v_p(vout00_0_v_p),
-        .dac0_clk_0_clk_n(dac0_clk_0_clk_n),
-        .dac0_clk_0_clk_p(dac0_clk_0_clk_p),        
-        .clk_adc0_0(clk_adc0_0),
-        .pl_clk0(pl_clk0),
-        .pl_resetn0(pl_resetn0));
+        .vout00_0_v_p(vout00_0_v_p));
 endmodule
