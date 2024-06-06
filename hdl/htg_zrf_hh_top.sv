@@ -268,7 +268,7 @@ module htg_zrf_hh_top(
         end else begin : AGC
             agc_design u_design( .wb_clk_i(ps_clk),
                                  .wb_rst_i(1'b0),
-                                 `CONNECT_WBS_IFS( wb_ , bm_ ),
+                                 `CONNECT_WBS_IFM( wb_ , bm_ ),
                                  .aclk(aclk),
                                  .aresetn(1'b1),
                                   `CONNECT_AXI4S_MIN_IF( adc0_ , adc0_ ),
